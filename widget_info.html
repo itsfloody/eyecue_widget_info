@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supported Metrics Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+        .metric-card {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease-in-out;
+        }
+        .metric-card:hover {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        .metric-header {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background-color: #eff6ff; /* Light blue background for headers */
+            border-bottom: 1px solid #dbeafe;
+        }
+        .metric-header:hover {
+            background-color: #dbeafe; /* Slightly darker on hover */
+        }
+        .metric-details {
+            padding: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            display: none; /* Hidden by default */
+        }
+        .detail-item {
+            margin-bottom: 0.75rem;
+        }
+        .detail-label {
+            font-weight: 600; /* Semi-bold */
+            color: #4b5563; /* Darker gray */
+        }
+        .detail-value {
+            color: #6b7280; /* Medium gray */
+        }
+        .arrow-icon {
+            transition: transform 0.3s ease-in-out;
+        }
+        .arrow-icon.rotated {
+            transform: rotate(90deg);
+        }
+        /* New styles for toggleable client list */
+        .toggle-header {
+            cursor: pointer;
+            color: #1a73e8; /* Blue for clickable text */
+            font-weight: 500; /* Medium weight */
+            text-decoration: underline;
+        }
+        .toggle-header:hover {
+            color: #1558b0; /* Darker blue on hover */
+        }
+        .client-list-container {
+            margin-top: 0.5rem;
+            padding-left: 1rem; /* Indent the list */
+            border-left: 2px solid #e0e0e0; /* Visual separator */
+        }
+    </style>
+</head>
+<body class="p-6">
+
+    <div class="max-w-6xl mx-auto py-8">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10 rounded-lg bg-white p-6 shadow-md">Supported Metrics Overview</h1>
+
+        <div id="metrics-container" class="space-y-6">
+            <!-- Active Departure Rate -->
+            <div class="metric-card rounded-lg overflow-hidden">
+                <div class="metric-header rounded-t-lg" onclick="toggleDetails(this)">
+                    <h2 class="text-2xl font-semibold text-blue-800">1. Active Departure Rate</h2>
+                    <svg class="arrow-icon w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Description / Business Meaning:</span>
+                        <span class="detail-value">This widget displays the rate at which vehicles are leaving the drive thru, during an active period.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">How it is calculated (formula or logic):</span>
+                        <span class="detail-value">The displayed value is the `activeDepartureRate` rounded to the nearest second, ensuring it's not negative ($\text{Math.round(Math.max(activeDepartureRate, 0))}$). It tracks a `targetValue` dynamically determined by current time, site-specific targets, and client targets. The gauge's `maxValue` is `target * 2$. The `interval` and `total` are derived from `selectActiveDepartureRate`.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Source of data:</span>
+                        <span class="detail-value">Vehicle presence detection and configuration from site and client targets. Data retrieved using `selectActiveDepartureRate` from `'@/stores/departures'`, `selectSiteTimeZone`, `selectTargetIntervals`, `selectSiteTargets`, and `selectClientTargets`. Topics: `/eyeq/active-departure-rate/<site_id>`. Requires ROI configuration.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Frequency of update:</span>
+                        <span class="detail-value">Real-time, updated every minute.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Clients currently using:</span>
+                        <span class="detail-value"><span class="toggle-header" onclick="toggleClientList(this)">[+] Show Clients (53)</span><div class="client-list-container" style="display:none;"><ul class="list-disc list-inside ml-4"><li>fm-cfa-usa-00695</li><li>fm-cfa-usa-00745</li><li>fm-cfa-usa-00799</li><li>fm-cfa-usa-00814</li><li>fm-cfa-usa-00829</li><li>fm-cfa-usa-01072</li><li>fm-cfa-usa-01218</li><li>fm-cfa-usa-01391</li><li>fm-cfa-usa-01490</li><li>fm-cfa-usa-01573</li><li>fm-cfa-usa-01801</li><li>fm-cfa-usa-02007</li><li>fm-cfa-usa-02077</li><li>fm-cfa-usa-02181</li><li>fm-cfa-usa-02196</li><li>fm-cfa-usa-02226</li><li>fm-cfa-usa-02276</li><li>fm-cfa-usa-02289</li><li>fm-cfa-usa-02367</li><li>fm-cfa-usa-02415</li><li>fm-cfa-usa-02634</li><li>fm-cfa-usa-02833</li><li>fm-cfa-usa-02859</li><li>fm-cfa-usa-02992</li><li>fm-cfa-usa-03018</li><li>fm-cfa-usa-03060</li><li>fm-cfa-usa-03138</li><li>fm-cfa-usa-03262</li><li>fm-cfa-usa-03698</li><li>fm-cfa-usa-03798</li><li>fm-cfa-usa-03881</li><li>fm-cfa-usa-03901</li><li>fm-cfa-usa-03910</li><li>fm-cfa-usa-03964</li><li>fm-cfa-usa-04263</li><li>fm-cfa-usa-04361</li><li>fm-cfa-usa-04539</li><li>fm-cfa-usa-04650</li><li>fm-cfa-usa-04819</li><li>fm-cfa-usa-04904</li><li>fm-cfa-usa-04962</li><li>fm-cfa-usa-05333</li><li>fm-elj-aus-0003</li><li>fm-mcd-aus-0281</li><li>fm-poc-nzl-00003</li><li>fm-poc-nzl-02024</li><li>fm-ptl-usa-00003</li><li>fm-ptl-usa-00005</li><li>fm-ptl-usa-00006</li><li>fm-ptl-usa-00027</li><li>fm-ptl-usa-00030</li><li>fm-ptl-usa-00062</li><li>fm-ptl-usa-00064</li><li>fm-ptl-usa-00070</li><li>fm-ptl-usa-00073</li><li>fm-ptl-usa-00077</li><li>fm-tim-can-00001</li><li>fm-tim-can-00002</li></ul></div>.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Any known limitations or relevant information:</span>
+                        <span class="detail-value">A feature flag (`eyecueDashboardUseAdrDefaultTitle`) can modify the title. A `TODO` exists to remove `getThisMomentTargetOrLastAvailable` after migrating all sites to a new 'store' table. Targets are optional, and can be set by uploading a CSV.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car Distribution (now covers Cars in Zones) -->
+            <div class="metric-card rounded-lg overflow-hidden">
+                <div class="metric-header" onclick="toggleDetails(this)">
+                    <h2 class="text-2xl font-semibold text-blue-800">2. Car Distribution (Cars in Zones)</h2>
+                    <svg class="arrow-icon w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Description / Business Meaning:</span>
+                        <span class="detail-value">This widget shows a real-time representation of the number of cars in each zone (Entry, Order, Deliver, and Exit) throughout the drive thru.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">How it is calculated (formula or logic):</span>
+                        <span class="detail-value">The `CarDistributionChart` component is used to display this. Specific calculation logic not detailed in configuration, but tracks cars per zone.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Source of data:</span>
+                        <span class="detail-value">Implied to be from vehicle detection in zones. Topics: `/eyeq/danger-zones/<site_id>`. Requires `queue-zone` functionality applied to ROIs.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Frequency of update:</span>
+                        <span class="detail-value">Real-time representation.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Clients currently using:</span>
+                        <span class="detail-value"><span class="toggle-header" onclick="toggleClientList(this)">[+] Show Clients (25)</span><div class="client-list-container" style="display:none;"><ul class="list-disc list-inside ml-4"><li>fm-cfa-usa-01573</li><li>fm-cfa-usa-03798</li><li>fm-mcd-aus-0034</li><li>fm-mcd-aus-0281</li><li>fm-mcd-aus-0599</li><li>fm-mcd-aus-0706</li><li>fm-mcd-aus-0725</li><li>fm-mcd-aus-0771</li><li>fm-mcd-aus-1273</li><li>fm-mcd-aus-1829</li><li>fm-mcd-aus-2029</li><li>fm-mcd-can-04463</li><li>fm-poc-nzl-00048</li><li>fm-ptl-usa-00003</li><li>fm-ptl-usa-00005</li><li>fm-ptl-usa-00006</li><li>fm-ptl-usa-00027</li><li>fm-ptl-usa-00030</li><li>fm-ptl-usa-00062</li><li>fm-ptl-usa-00064</li><li>fm-ptl-usa-00070</li><li>fm-ptl-usa-00073</li><li>fm-ptl-usa-00077</li><li>fm-tst-burgermark-0001</li></ul></div>.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Any known limitations or relevant information:</span>
+                        <span class="detail-value">Configurable `title`. Supports both a legacy and a UI V3 configuration interface.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OEPE Average last 60 -->
+            <div class="metric-card rounded-lg overflow-hidden">
+                <div class="metric-header" onclick="toggleDetails(this)">
+                    <h2 class="text-2xl font-semibold text-blue-800">3. OEPE Average last 60</h2>
+                    <svg class="arrow-icon w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Description / Business Meaning:</span>
+                        <span class="detail-value">Likely refers to "Order Entry to Payment Exit" and represents an average time over the last 60 units (possibly minutes or orders).</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">How it is calculated (formula or logic):</span>
+                        <span class="detail-value">Displayed as a gauge with a current metric value and a target value.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Source of data:</span>
+                        <span class="detail-value">TBD.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Frequency of update:</span>
+                        <span class="detail-value">Implied to be continuously updated to reflect the "last 60" average.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Clients currently using:</span>
+                        <span class="detail-value"><span class="toggle-header" onclick="toggleClientList(this)">[+] Show Clients (130)</span><div class="client-list-container" style="display:none;"><ul class="list-disc list-inside ml-4"><li>fm-bkg-nzl-0000198</li><li>fm-bkg-nzl-00002</li><li>fm-bkg-nzl-00003</li><li>fm-bkg-nzl-00005</li><li>fm-bkg-nzl-00006</li><li>fm-bkg-nzl-00008</li><li>fm-bkg-nzl-00010</li><li>fm-bkg-nzl-00012</li><li>fm-bkg-nzl-00014</li><li>fm-bkg-nzl-00015</li><li>fm-bkg-nzl-00016</li><li>fm-bkg-nzl-00017</li><li>fm-bkg-nzl-00018</li><li>fm-bkg-nzl-00019</li><li>fm-bkg-nzl-00023</li><li>fm-bkg-nzl-00026</li><li>fm-bkg-nzl-00029</li><li>fm-bkg-nzl-00031</li><li>fm-bkg-nzl-00032</li><li>fm-bkg-nzl-00035</li><li>fm-bkg-nzl-00037</li><li>fm-bkg-nzl-00038</li><li>fm-bkg-nzl-00039</li><li>fm-bkg-nzl-00040</li><li>fm-bkg-nzl-00042</li><li>fm-bkg-nzl-00043</li><li>fm-bkg-nzl-00044</li><li>fm-bkg-nzl-00045</li><li>fm-bkg-nzl-00046</li><li>fm-bkg-nzl-00047</li><li>fm-bkg-nzl-00048</li><li>fm-bkg-nzl-00049</li><li>fm-bkg-nzl-00050</li><li>fm-bkg-nzl-00051</li><li>fm-bkg-nzl-00052</li><li>fm-bkg-nzl-00055</li><li>fm-bkg-nzl-00056</li><li>fm-bkg-nzl-00057</li><li>fm-bkg-nzl-00058</li><li>fm-bkg-nzl-00061</li><li>fm-bkg-nzl-00062</li><li>fm-bkg-nzl-00063</li><li>fm-bkg-nzl-00064</li><li>fm-bkg-nzl-00065</li><li>fm-bkg-nzl-00066</li><li>fm-bkg-nzl-00067</li><li>fm-bkg-nzl-00069</li><li>fm-bkg-nzl-00070</li><li>fm-bkg-nzl-00071</li><li>fm-bkg-nzl-00073</li><li>fm-bkg-nzl-00074</li><li>fm-bkg-nzl-00075</li><li>fm-bkg-nzl-00076</li><li>fm-bkg-nzl-00077</li><li>fm-bkg-nzl-00078</li><li>fm-bkg-nzl-00079</li><li>fm-bkg-nzl-00080</li><li>fm-bkg-nzl-00081</li><li>fm-bkg-nzl-00082</li><li>fm-bkg-nzl-00083</li><li>fm-bkg-nzl-00084</li><li>fm-bkg-nzl-00085</li><li>fm-bkg-nzl-00086</li><li>fm-bkg-nzl-00087</li><li>fm-bkg-nzl-00088</li><li>fm-bkg-nzl-00089</li><li>fm-bkg-nzl-00090</li><li>fm-bkg-nzl-00091</li><li>fm-bkg-nzl-00092</li><li>fm-bkg-nzl-00093</li><li>fm-bkg-nzl-00094</li><li>fm-bkg-nzl-00095</li><li>fm-bkg-nzl-00096</li><li>fm-bkg-nzl-00097</li><li>fm-bkg-nzl-00098</li><li>fm-bkg-nzl-00099</li><li>fm-bkg-usa-00001</li><li>fm-bkg-usa-00064</li><li>fm-bkg-usa-07553</li><li>fm-cfa-usa-00695</li><li>fm-cfa-usa-00745</li><li>fm-cfa-usa-00799</li><li>fm-cfa-usa-00814</li><li>fm-cfa-usa-00829</li><li>fm-cfa-usa-01072</li><li>fm-cfa-usa-01218</li><li>fm-cfa-usa-01391</li><li>fm-cfa-usa-01490</li><li>fm-cfa-usa-01573</li><li>fm-cfa-usa-01801</li><li>fm-cfa-usa-02007</li><li>fm-cfa-usa-02077</li><li>fm-cfa-usa-02181</li><li>fm-cfa-usa-02196</li><li>fm-cfa-usa-02226</li><li>fm-cfa-usa-02276</li><li>fm-cfa-usa-02289</li><li>fm-cfa-usa-02367</li><li>fm-cfa-usa-02415</li><li>fm-cfa-usa-02634</li><li>fm-cfa-usa-02833</li><li>fm-cfa-usa-02859</li><li>fm-cfa-usa-02992</li><li>fm-cfa-usa-03018</li><li>fm-cfa-usa-03060</li><li>fm-cfa-usa-03138</li><li>fm-cfa-usa-03262</li><li>fm-cfa-usa-03698</li><li>fm-cfa-usa-03798</li><li>fm-cfa-usa-03881</li><li>fm-cfa-usa-03901</li><li>fm-cfa-usa-03910</li><li>fm-cfa-usa-03964</li><li>fm-cfa-usa-04263</li><li>fm-cfa-usa-04361</li><li>fm-cfa-usa-04539</li><li>fm-cfa-usa-04650</li><li>fm-cfa-usa-04819</li><li>fm-cfa-usa-04904</li><li>fm-cfa-usa-04962</li><li>fm-cfa-usa-05333</li><li>fm-cul-usa-00189</li><li>fm-cul-usa-00240</li><li>fm-czp-usa-00144</li><li>fm-czp-usa-00162</li><li>fm-czp-usa-00171</li><li>fm-czp-usa-00173</li><li>fm-czp-usa-00174</li><li>fm-czp-usa-00175</li><li>fm-czp-usa-00176</li><li>fm-czp-usa-00177</li><li>fm-czp-usa-00178</li><li>fm-czp-usa-00180</li><li>fm-czp-usa-00181</li><li>fm-czp-usa-00182</li><li>fm-czp-usa-00183</li><li>fm-czp-usa-00184</li><li>fm-czp-usa-00185</li><li>fm-czp-usa-0147</li><li>fm-czp-usa-0164</li><li>fm-czp-usa-0165</li><li>fm-czp-usa-0166</li><li>fm-czp-usa-0167</li><li>fm-czp-usa-0168</li><li>fm-czp-usa-0169</li><li>fm-czp-usa-0170</li><li>fm-czp-usa-0172</li><li>fm-elj-aus-0003</li><li>fm-mcd-aus-0034</li><li>fm-mcd-aus-0049</li><li>fm-mcd-aus-0281</li><li>fm-mcd-aus-0414</li><li>fm-mcd-aus-0599</li><li>fm-mcd-aus-0706</li><li>fm-mcd-aus-0725</li><li>fm-mcd-aus-0771</li><li>fm-mcd-aus-1273</li><li>fm-mcd-aus-1829</li><li>fm-mcd-aus-2029</li><li>fm-mcd-can-04463</li><li>fm-poc-nzl-00002</li><li>fm-poc-nzl-00003</li><li>fm-poc-nzl-00048</li><li>fm-poc-nzl-00095</li><li>fm-poc-nzl-00096</li><li>fm-poc-nzl-02025</li><li>fm-poc-nzl-03001</li><li>fm-pop-nzl-03001</li><li>fm-pop-nzl-03002</li><li>fm-pop-nzl-03005</li><li>fm-pop-nzl-03006</li><li>fm-pop-nzl-03007</li><li>fm-pop-nzl-03009</li><li>fm-pop-nzl-03010</li><li>fm-pop-usa-02023</li><li>fm-ptl-usa-00003</li><li>fm-stb-nzl-00001</li><li>fm-stb-nzl-05480</li><li>fm-stb-nzl-05481</li><li>fm-stb-nzl-05742</li><li>fm-tim-can-00001</li><li>fm-tim-can-00002</li><li>fm-zmb-aus-00001</li></ul></div>.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Any known limitations or relevant information:</span>
+                        <span class="detail-value">None explicitly stated.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time at Window (Consolidating Waiting Bay, COD1, COD2, Cashier, Present) -->
+            <div class="metric-card rounded-lg overflow-hidden">
+                <div class="metric-header" onclick="toggleDetails(this)">
+                    <h2 class="text-2xl font-semibold text-blue-800">4. Time at Window (Covers: Waiting Bay, COD1, COD2, Cashier, Present)</h2>
+                    <svg class="arrow-icon w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Description / Business Meaning:</span>
+                        <span class="detail-value">This widget displays the live time that a vehicle spends at a point in the drive thru. This can include Order, Payment, Window (pickup), Pull Forward, Waiting Bay, Customer Order Display (COD), Cashier, and general "Present" times.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">How it is calculated (formula or logic):</span>
+                        <span class="detail-value">For each ROI, if `vehicleCount > 0` and `timestamp` exists, `elapsedTime` is calculated as `differenceInSeconds(now, dateTime)`. Background color changes based on `elapsedTime` relative to a `target` (`bg-indicator-empty` if 0, `bg-indicator-okay` if $\le$ `target`, `bg-indicator-alert` if $>$ `target`). Target uses `getThisMomentTarget` from `siteTarget` or `targetTimes?.[targetId]`, defaulting to 25. Configurable `redThreshold` (type: number) per ROI label.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Source of data:</span>
+                        <span class="detail-value">Vehicle presence and progression through defined ROIs. Data retrieved using `useTimeAtWindows`, `selectTargetTimes`, `selectSiteTargets`, `selectClientTargets`, `selectSiteTimeZone`, and `selectDurationFormat`. IOT Topic: `/eyeq/roicount/<site_id>`. Requires `stream_roi` functionality to be added to the ROI.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Frequency of update:</span>
+                        <span class="detail-value">Real-time, updated live based on current time.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Clients currently using:</span>
+                        <span class="detail-value"><span class="toggle-header" onclick="toggleClientList(this)">[+] Show Clients (130)</span><div class="client-list-container" style="display:none;"><ul class="list-disc list-inside ml-4"><li>fm-bkg-nzl-0000198</li><li>fm-bkg-nzl-00002</li><li>fm-bkg-nzl-00003</li><li>fm-bkg-nzl-00005</li><li>fm-bkg-nzl-00006</li><li>fm-bkg-nzl-00008</li><li>fm-bkg-nzl-00010</li><li>fm-bkg-nzl-00012</li><li>fm-bkg-nzl-00014</li><li>fm-bkg-nzl-00015</li><li>fm-bkg-nzl-00016</li><li>fm-bkg-nzl-00017</li><li>fm-bkg-nzl-00018</li><li>fm-bkg-nzl-00019</li><li>fm-bkg-nzl-00023</li><li>fm-bkg-nzl-00026</li><li>fm-bkg-nzl-00029</li><li>fm-bkg-nzl-00031</li><li>fm-bkg-nzl-00032</li><li>fm-bkg-nzl-00035</li><li>fm-bkg-nzl-00037</li><li>fm-bkg-nzl-00038</li><li>fm-bkg-nzl-00039</li><li>fm-bkg-nzl-00040</li><li>fm-bkg-nzl-00042</li><li>fm-bkg-nzl-00043</li><li>fm-bkg-nzl-00044</li><li>fm-bkg-nzl-00045</li><li>fm-bkg-nzl-00046</li><li>fm-bkg-nzl-00047</li><li>fm-bkg-nzl-00048</li><li>fm-bkg-nzl-00049</li><li>fm-bkg-nzl-00050</li><li>fm-bkg-nzl-00051</li><li>fm-bkg-nzl-00052</li><li>fm-bkg-nzl-00055</li><li>fm-bkg-nzl-00056</li><li>fm-bkg-nzl-00057</li><li>fm-bkg-nzl-00058</li><li>fm-bkg-nzl-00061</li><li>fm-bkg-nzl-00062</li><li>fm-bkg-nzl-00063</li><li>fm-bkg-nzl-00064</li><li>fm-bkg-nzl-00065</li><li>fm-bkg-nzl-00066</li><li>fm-bkg-nzl-00067</li><li>fm-bkg-nzl-00069</li><li>fm-bkg-nzl-00070</li><li>fm-bkg-nzl-00071</li><li>fm-bkg-nzl-00073</li><li>fm-bkg-nzl-00074</li><li>fm-bkg-nzl-00075</li><li>fm-bkg-nzl-00076</li><li>fm-bkg-nzl-00077</li><li>fm-bkg-nzl-00078</li><li>fm-bkg-nzl-00079</li><li>fm-bkg-nzl-00080</li><li>fm-bkg-nzl-00081</li><li>fm-bkg-nzl-00082</li><li>fm-bkg-nzl-00083</li><li>fm-bkg-nzl-00084</li><li>fm-bkg-nzl-00085</li><li>fm-bkg-nzl-00086</li><li>fm-bkg-nzl-00087</li><li>fm-bkg-nzl-00088</li><li>fm-bkg-nzl-00089</li><li>fm-bkg-nzl-00090</li><li>fm-bkg-nzl-00091</li><li>fm-bkg-nzl-00092</li><li>fm-bkg-nzl-00093</li><li>fm-bkg-nzl-00094</li><li>fm-bkg-nzl-00095</li><li>fm-bkg-nzl-00096</li><li>fm-bkg-nzl-00097</li><li>fm-bkg-nzl-00098</li><li>fm-bkg-nzl-00099</li><li>fm-bkg-usa-00001</li><li>fm-bkg-usa-00064</li><li>fm-bkg-usa-07553</li><li>fm-cul-usa-00189</li><li>fm-cul-usa-00240</li><li>fm-czp-usa-00144</li><li>fm-czp-usa-00162</li><li>fm-czp-usa-00171</li><li>fm-czp-usa-00173</li><li>fm-czp-usa-00174</li><li>fm-czp-usa-00175</li><li>fm-czp-usa-00176</li><li>fm-czp-usa-00177</li><li>fm-czp-usa-00178</li><li>fm-czp-usa-00180</li><li>fm-czp-usa-00181</li><li>fm-czp-usa-00182</li><li>fm-czp-usa-00183</li><li>fm-czp-usa-00184</li><li>fm-czp-usa-00185</li><li>fm-czp-usa-0147</li><li>fm-czp-usa-0164</li><li>fm-czp-usa-0165</li><li>fm-czp-usa-0166</li><li>fm-czp-usa-0167</li><li>fm-czp-usa-0168</li><li>fm-czp-usa-0169</li><li>fm-czp-usa-0170</li><li>fm-czp-usa-0172</li><li>fm-elj-aus-0003</li><li>fm-kfc-are-12170</li><li>fm-mcd-aus-0034</li><li>fm-mcd-aus-0049</li><li>fm-mcd-aus-0281</li><li>fm-mcd-aus-0414</li><li>fm-mcd-aus-0599</li><li>fm-mcd-aus-0706</li><li>fm-mcd-aus-0725</li><li>fm-mcd-aus-0771</li><li>fm-mcd-aus-1273</li><li>fm-mcd-aus-1829</li><li>fm-mcd-aus-2029</li><li>fm-mcd-can-04463</li><li>fm-poc-nzl-00002</li><li>fm-poc-nzl-00003</li><li>fm-poc-nzl-00048</li><li>fm-poc-nzl-00095</li><li>fm-poc-nzl-00096</li><li>fm-poc-nzl-02025</li><li>fm-poc-nzl-03001</li><li>fm-pop-nzl-03001</li><li>fm-pop-nzl-03002</li><li>fm-pop-nzl-03005</li><li>fm-pop-nzl-03006</li><li>fm-pop-nzl-03007</li><li>fm-pop-nzl-03009</li><li>fm-pop-nzl-03010</li><li>fm-pop-usa-02023</li><li>fm-ptl-usa-00003</li><li>fm-ptl-usa-00005</li><li>fm-ptl-usa-00006</li><li>fm-ptl-usa-00027</li><li>fm-ptl-usa-00030</li><li>fm-ptl-usa-00062</li><li>fm-ptl-usa-00064</li><li>fm-ptl-usa-00070</li><li>fm-ptl-usa-00073</li><li>fm-ptl-usa-00077</li><li>fm-stb-nzl-00001</li><li>fm-stb-nzl-05480</li><li>fm-stb-nzl-05481</li><li>fm-stb-nzl-05742</li><li>fm-tim-can-00001</li><li>fm-tim-can-00002</li><li>fm-zmb-aus-00001</li></ul></div>.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Any known limitations or relevant information:</span>
+                        <span class="detail-value">Configurable to display single, double, triple, or quadruple time metrics based on `roiLabels`. Includes `Validation`. A `TODO` exists to remove `targetTimes` after migrating all sites to a new 'store' table.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lead Car Timer (now covers Oldest Car in Lane) -->
+            <div class="metric-card rounded-lg overflow-hidden">
+                <div class="metric-header" onclick="toggleDetails(this)">
+                    <h2 class="text-2xl font-semibold text-blue-800">5. Lead Car Timer (Oldest Car in Lane)</h2>
+                    <svg class="arrow-icon w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Description / Business Meaning:</span>
+                        <span class="detail-value">This widget displays the duration that the lead car per lane has spent at the front of the drive thru queue. A `redThreshold` indicates a critical or undesirable time duration for the lead car.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">How it is calculated (formula or logic):</span>
+                        <span class="detail-value">For each configured `roiId` in `roiLabels`, `timestamp` is `roisLeadCarResetTimes[roiId]` or `roisOldestVehicle[roiId]`. If `vehicleCount > 0` and `timestamp` exists, `elapsedTime` is `differenceInSeconds(now, dateTime)`. Display is formatted. Background color changes based on `elapsedTime` vs `redThreshold` (default 20s): `bg-indicator-empty` (0), `bg-indicator-okay` ($\le$ `redThreshold`), `bg-indicator-alert` ($>$ `redThreshold`).</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Source of data:</span>
+                        <span class="detail-value">Vehicle entry and reset times within defined ROIs. Data retrieved via `selectLeadCarResetTimes`, `selectOldestVehicleEntryTime`, and `selectVehicleCount` from `'@/stores/rois'`. IOT Topic: `/eyeq/roicount/<site_id>`. Requires `stream_roi` functionality to be added to the ROI.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Frequency of update:</span>
+                        <span class="detail-value">Real-time, using `Timed` component for live updates.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Clients currently using:</span>
+                        <span class="detail-value"><span class="toggle-header" onclick="toggleClientList(this)">[+] Show Clients (21)</span><div class="client-list-container" style="display:none;"><ul class="list-disc list-inside ml-4"><li>fm-cfa-usa-01573</li><li>fm-cfa-usa-03798</li><li>fm-cul-usa-00189</li><li>fm-cul-usa-00240</li><li>fm-czp-usa-00144</li><li>fm-elj-aus-0003</li><li>fm-mcd-aus-0034</li><li>fm-mcd-aus-0049</li><li>fm-mcd-aus-0281</li><li>fm-mcd-aus-0414</li><li>fm-mcd-aus-0706</li><li>fm-mcd-aus-0725</li><li>fm-mcd-aus-0771</li><li>fm-mcd-aus-1273</li><li>fm-mcd-aus-1829</li><li>fm-mcd-aus-2029</li><li>fm-mcd-can-04463</li><li>fm-poc-nzl-00048</li><li>fm-ptl-usa-00003</li><li>fm-tst-burgermark-0001</li><li>fm-zmb-aus-00001</li></ul></div>.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Any known limitations or relevant information:</span>
+                        <span class="detail-value">Configurable for multiple lanes/ROIs using `roiLabels` (array of objects with `roiId` (string), `label` (string), `redThreshold` (number)). Includes `Validation`. `description` in `widgetMetadata` is a "Placeholder description".</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Departure Rate -->
+            <div class="metric-card rounded-lg overflow-hidden">
+                <div class="metric-header" onclick="toggleDetails(this)">
+                    <h2 class="text-2xl font-semibold text-blue-800">6. Departure Rate</h2>
+                    <svg class="arrow-icon w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Description / Business Meaning:</span>
+                        <span class="detail-value">This widget displays the rate at which vehicles are leaving the drive thru, in the last 15 minute period.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">How it is calculated (formula or logic):</span>
+                        <span class="detail-value">Calculation: 900 / vehicles that left the drive through. For example, if 100 cars left in 15 minutes, the departure rate would be 9 Seconds.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Source of data:</span>
+                        <span class="detail-value">TBD. Topics: `/eyeq/bar-chart-depart-rate-15min/<site_id>`. Requires ROI configuration.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Frequency of update:</span>
+                        <span class="detail-value">Based on a 15-minute period.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Clients currently using:</span>
+                        <span class="detail-value"><span class="toggle-header" onclick="toggleClientList(this)">[+] Show Clients (12)</span><div class="client-list-container" style="display:none;"><ul class="list-disc list-inside ml-4"><li>fm-cfa-usa-01573</li><li>fm-cfa-usa-03798</li><li>fm-mcd-aus-0034</li><li>fm-mcd-aus-0281</li><li>fm-mcd-aus-0599</li><li>fm-mcd-aus-0771</li><li>fm-mcd-aus-2029</li><li>fm-poc-nzl-00048</li><li>fm-ptl-usa-00003</li><li>fm-ptl-usa-00006</li><li>fm-ptl-usa-00027</li><li>fm-tst-burgermark-0001</li></ul></div>.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Any known limitations or relevant information:</span>
+                        <span class="detail-value">Configurable with `roiType` (string) and `title`. Targets are optional, and can be set by uploading a CSV. Supports both a legacy and a UI V3 configuration interface.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Departure Rate Bar Chart -->
+            <div class="metric-card rounded-lg overflow-hidden">
+                <div class="metric-header" onclick="toggleDetails(this)">
+                    <h2 class="text-2xl font-semibold text-blue-800">7. Departure Rate Bar Chart</h2>
+                    <svg class="arrow-icon w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Description / Business Meaning:</span>
+                        <span class="detail-value">Visualizes the average departure rate for the last 15 minutes in a bar chart with configurable intervals. Shows the rate at which vehicles have left the drive thru over a recent historical period (default is last 4 hours). The bars display grey for the current period, green if the target is not met, and pink if the target is met or exceeded.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">How it is calculated (formula or logic):</span>
+                        <span class="detail-value">Processes `departRateHistoricalData`, converting `intervalStartTime` to `timestamp` and `departRate` (defaulting to 0) to `value`. `filterAndDecorateData` is applied, considering `timeZone`, `hoursToDisplay` (default 4), `TargetType.DepartureRate`, and `targetRates`. Uses `AggregationMethod.AVERAGE`. Bar color logic based on target.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Source of data:</span>
+                        <span class="detail-value">Historical 15-minute departure rate data from `selectDepartureRateHistorical15Min(roiType)`. Uses site-specific configurations: `selectSiteTimeZone`, `selectTargetIntervals`, `selectSiteTargets`. Topics: `/eyeq/bar-chart-depart-rate-15min/<site_id>`. Requires ROI configuration.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Frequency of update:</span>
+                        <span class="detail-value">Processes "historical 15 minutes" data, and displays over configurable hours (default 4 hours), implying regular updates.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Clients currently using:</span>
+                        <span class="detail-value"><span class="toggle-header" onclick="toggleClientList(this)">[+] Show Clients (3)</span><div class="client-list-container" style="display:none;"><ul class="list-disc list-inside ml-4"><li>fm-cfa-usa-01573</li><li>fm-cfa-usa-03798</li><li>fm-poc-nzl-00048</li></ul></div>.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Any known limitations or relevant information:</span>
+                        <span class="detail-value">Configurable `chartSize` (string: "SMALL", "LARGE") and `hoursToDisplay` (number, max 4, min 1). Includes `Validation`. Can be `invert`ed. Can `hideTargetLine` based on `TargetType.DepartureCount` target absence. Requires `roiType` (string). Targets are optional, and can be set by uploading a CSV. Supports legacy and UI V3 configuration.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leaderboard -->
+            <div class="metric-card rounded-lg overflow-hidden">
+                <div class="metric-header" onclick="toggleDetails(this)">
+                    <h2 class="text-2xl font-semibold text-blue-800">8. Leaderboard</h2>
+                    <svg class="arrow-icon w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Description / Business Meaning:</span>
+                        <span class="detail-value">Displays a ranking or top performers based on a selected metric, such as "Perfect Car Count".</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">How it is calculated (formula or logic):</span>
+                        <span class="detail-value">This component handles the configuration of a leaderboard. The specific calculation logic for the selected metric (`LeaderboardMetric`) is not present in this file.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Source of data:</span>
+                        <span class="detail-value">Data for the `metric` is implied to come from sources used by `LeaderboardMetricOptions`. Topics: `/eyeq/rolling/<site_id>`.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Frequency of update:</span>
+                        <span class="detail-value">Not specified in this configuration file.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Clients currently using:</span>
+                        <span class="detail-value"><span class="toggle-header" onclick="toggleClientList(this)">[+] Show Clients (106)</span><div class="client-list-container" style="display:none;"><ul class="list-disc list-inside ml-4"><li>fm-bkg-nzl-0000198</li><li>fm-bkg-nzl-00002</li><li>fm-bkg-nzl-00003</li><li>fm-bkg-nzl-00005</li><li>fm-bkg-nzl-00006</li><li>fm-bkg-nzl-00008</li><li>fm-bkg-nzl-00010</li><li>fm-bkg-nzl-00012</li><li>fm-bkg-nzl-00014</li><li>fm-bkg-nzl-00015</li><li>fm-bkg-nzl-00016</li><li>fm-bkg-nzl-00017</li><li>fm-bkg-nzl-00018</li><li>fm-bkg-nzl-00019</li><li>fm-bkg-nzl-00023</li><li>fm-bkg-nzl-00026</li><li>fm-bkg-nzl-00029</li><li>fm-bkg-nzl-00031</li><li>fm-bkg-nzl-00032</li><li>fm-bkg-nzl-00035</li><li>fm-bkg-nzl-00037</li><li>fm-bkg-nzl-00038</li><li>fm-bkg-nzl-00039</li><li>fm-bkg-nzl-00040</li><li>fm-bkg-nzl-00042</li><li>fm-bkg-nzl-00043</li><li>fm-bkg-nzl-00044</li><li>fm-bkg-nzl-00045</li><li>fm-bkg-nzl-00046</li><li>fm-bkg-nzl-00047</li><li>fm-bkg-nzl-00048</li><li>fm-bkg-nzl-00049</li><li>fm-bkg-nzl-00050</li><li>fm-bkg-nzl-00051</li><li>fm-bkg-nzl-00052</li><li>fm-bkg-nzl-00055</li><li>fm-bkg-nzl-00056</li><li>fm-bkg-nzl-00057</li><li>fm-bkg-nzl-00058</li><li>fm-bkg-nzl-00061</li><li>fm-bkg-nzl-00062</li><li>fm-bkg-nzl-00063</li><li>fm-bkg-nzl-00064</li><li>fm-bkg-nzl-00065</li><li>fm-bkg-nzl-00066</li><li>fm-bkg-nzl-00067</li><li>fm-bkg-nzl-00069</li><li>fm-bkg-nzl-00070</li><li>fm-bkg-nzl-00071</li><li>fm-bkg-nzl-00073</li><li>fm-bkg-nzl-00074</li><li>fm-bkg-nzl-00075</li><li>fm-bkg-nzl-00076</li><li>fm-bkg-nzl-00077</li><li>fm-bkg-nzl-00078</li><li>fm-bkg-nzl-00079</li><li>fm-bkg-nzl-00080</li><li>fm-bkg-nzl-00081</li><li>fm-bkg-nzl-00082</li><li>fm-bkg-nzl-00083</li><li>fm-bkg-nzl-00084</li><li>fm-bkg-nzl-00085</li><li>fm-bkg-nzl-00086</li><li>fm-bkg-nzl-00087</li><li>fm-bkg-nzl-00088</li><li>fm-bkg-nzl-00089</li><li>fm-bkg-nzl-00090</li><li>fm-bkg-nzl-00091</li><li>fm-bkg-nzl-00092</li><li>fm-bkg-nzl-00093</li><li>fm-bkg-nzl-00094</li><li>fm-bkg-nzl-00095</li><li>fm-bkg-nzl-00096</li><li>fm-bkg-nzl-00097</li><li>fm-bkg-nzl-00098</li><li>fm-bkg-nzl-00099</li><li>fm-bkg-usa-07553</li><li>fm-elj-aus-0003</li><li>fm-pop-nzl-03001</li><li>fm-pop-nzl-03002</li><li>fm-pop-nzl-03005</li><li>fm-pop-nzl-03006</li><li>fm-pop-nzl-03007</li><li>fm-pop-nzl-03009</li><li>fm-pop-nzl-03010</li><li>fm-ptl-usa-00003</li><li>fm-ptl-usa-00005</li><li>fm-ptl-usa-00006</li><li>fm-ptl-usa-00027</li><li>fm-ptl-usa-00030</li><li>fm-ptl-usa-00062</li><li>fm-ptl-usa-00064</li><li>fm-ptl-usa-00070</li><li>fm-ptl-usa-00073</li><li>fm-ptl-usa-00077</li><li>fm-stb-nzl-00001</li><li>fm-stb-nzl-05480</li><li>fm-stb-nzl-05481</li><li>fm-stb-nzl-05742</li></ul></div>.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Any known limitations or relevant information:</span>
+                        <span class="detail-value">Configurable `boardTitle` (string), `description` (string), and `metric` (enum: `LeaderboardMetric`). Defaults to `LeaderboardMetric.PERFECT_CAR_COUNT`. Supports legacy and UI V3 configuration.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Departure/Arrival Timeline -->
+            <div class="metric-card rounded-lg overflow-hidden">
+                <div class="metric-header" onclick="toggleDetails(this)">
+                    <h2 class="text-2xl font-semibold text-blue-800">9. Departure/Arrival Timeline</h2>
+                    <svg class="arrow-icon w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Description / Business Meaning:</span>
+                        <span class="detail-value">This widget shows a real-time representation of when vehicles are arriving and leaving the drive thru.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">How it is calculated (formula or logic):</span>
+                        <span class="detail-value">Not explicitly detailed, but visualizes arrival and departure events on a timeline.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Source of data:</span>
+                        <span class="detail-value">Topics: `/eyeq/departure/<site_id>`.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Frequency of update:</span>
+                        <span class="detail-value">Real-time representation.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Clients currently using:</span>
+                        <span class="detail-value">TBD.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Any known limitations or relevant information:</span>
+                        <span class="detail-value">Configurable `showDepartures` (boolean) and `showArrivals` (boolean) to control displayed events.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Departure Count -->
+            <div class="metric-card rounded-lg overflow-hidden">
+                <div class="metric-header" onclick="toggleDetails(this)">
+                    <h2 class="text-2xl font-semibold text-blue-800">10. Departure Count</h2>
+                    <svg class="arrow-icon w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Description / Business Meaning:</span>
+                        <span class="detail-value">This widget shows the number of vehicles that have departed from the drive thru in the last 15 minute period. The gauge displays pink up until the count reaches the target, when it will change to green.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">How it is calculated (formula or logic):</span>
+                        <span class="detail-value">Number of vehicles that have departed from the drive thru in the last 15 minute period. Gauge color changes based on count vs. target.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Source of data:</span>
+                        <span class="detail-value">Topics: `/eyeq/bar-chart-depart-count-15min/<site_id>`. Requires ROI configuration.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Frequency of update:</span>
+                        <span class="detail-value">Based on a 15-minute period.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Clients currently using:</span>
+                        <span class="detail-value"><span class="toggle-header" onclick="toggleClientList(this)">[+] Show Clients (8)</span><div class="client-list-container" style="display:none;"><ul class="list-disc list-inside ml-4"><li>fm-bkg-nzl-00048</li><li>fm-bkg-usa-00001</li><li>fm-cfa-usa-01573</li><li>fm-cfa-usa-03798</li><li>fm-mcd-aus-0281</li><li>fm-poc-nzl-00048</li><li>fm-ptl-usa-00003</li><li>fm-tst-burgermark-0001</li></ul></div>.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Any known limitations or relevant information:</span>
+                        <span class="detail-value">Targets are optional, and can be set by uploading a CSV. Configurable `roiType` (string).</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lead Car Timer V2 -->
+            <div class="metric-card rounded-lg overflow-hidden">
+                <div class="metric-header" onclick="toggleDetails(this)">
+                    <h2 class="text-2xl font-semibold text-blue-800">11. Lead Car Timer V2</h2>
+                    <svg class="arrow-icon w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Description / Business Meaning:</span>
+                        <span class="detail-value">Similar to the original Lead Car Timer, but in this iteration no `redThreshold` is required so the widget remains static visually (e.g., doesn’t change color). Displays the duration the lead car per lane has spent at the front of the queue.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">How it is calculated (formula or logic):</span>
+                        <span class="detail-value">Same as Lead Car Timer, but without threshold-based color changes.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Source of data:</span>
+                        <span class="detail-value">IOT Topic: `/eyeq/roicount/<site_id>`. Requires `stream_roi` functionality to be added to the ROI.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Frequency of update:</span>
+                        <span class="detail-value">Real-time.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Clients currently using:</span>
+                        <span class="detail-value">TBD.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Any known limitations or relevant information:</span>
+                        <span class="detail-value">Does not use `redThreshold` and thus does not change color dynamically based on time.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Most Departures Tracker -->
+            <div class="metric-card rounded-lg overflow-hidden">
+                <div class="metric-header" onclick="toggleDetails(this)">
+                    <h2 class="text-2xl font-semibold text-blue-800">12. Most Departures Tracker</h2>
+                    <svg class="arrow-icon w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Description / Business Meaning:</span>
+                        <span class="detail-value">This widget displays the current record and time period for the most departures within an hour. The gauge displays pink up until the record is met, at which point it will change to green.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">How it is calculated (formula or logic):</span>
+                        <span class="detail-value">Tracks current record for most departures within an hour. Gauge color changes based on record vs. target.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Source of data:</span>
+                        <span class="detail-value">Topics: `/eyeq/best-60-minute-count/<site_id>`.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Frequency of update:</span>
+                        <span class="detail-value">Real-time/Continuous.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Clients currently using:</span>
+                        <span class="detail-value">TBD.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Any known limitations or relevant information:</span>
+                        <span class="detail-value">None explicitly stated.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- On Pace -->
+            <div class="metric-card rounded-lg overflow-hidden">
+                <div class="metric-header" onclick="toggleDetails(this)">
+                    <h2 class="text-2xl font-semibold text-blue-800">13. On Pace</h2>
+                    <svg class="arrow-icon w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Description / Business Meaning:</span>
+                        <span class="detail-value">This widget displays the On Pace Chart (Left) and the On Pace Summary (Right). The Chart shows Green Line (Departure Records per 15 minutes), Solid blue areas (Current departures), Transparent blue area (Projected departures). The Summary shows Record (Green - Departure record for this hour), Projected (Black - Projected departures for this hour), Current (Blue - Current departures for this hour).</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">How it is calculated (formula or logic):</span>
+                        <span class="detail-value">Calculations for Departure Records, Current departures, Projected departures. Record shows most departures for the hour for the current day of the week. Projected shows estimated departures for the hour. Current shows hour-to-date departures.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Source of data:</span>
+                        <span class="detail-value">Topics: `/eyeq/onpace/<site_id>`, `/eyeq/bar-chart-depart-count-15min/<site_id>`.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Frequency of update:</span>
+                        <span class="detail-value">Real-time/Continuous for current and projected values. Historical for records.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Clients currently using:</span>
+                        <span class="detail-value"><span class="toggle-header" onclick="toggleClientList(this)">[+] Show Clients (46)</span><div class="client-list-container" style="display:none;"><ul class="list-disc list-inside ml-4"><li>fm-cfa-usa-00695</li><li>fm-cfa-usa-00745</li><li>fm-cfa-usa-00799</li><li>fm-cfa-usa-00814</li><li>fm-cfa-usa-00829</li><li>fm-cfa-usa-01072</li><li>fm-cfa-usa-01218</li><li>fm-cfa-usa-01391</li><li>fm-cfa-usa-01490</li><li>fm-cfa-usa-01573</li><li>fm-cfa-usa-01801</li><li>fm-cfa-usa-02007</li><li>fm-cfa-usa-02077</li><li>fm-cfa-usa-02181</li><li>fm-cfa-usa-02196</li><li>fm-cfa-usa-02226</li><li>fm-cfa-usa-02276</li><li>fm-cfa-usa-02289</li><li>fm-cfa-usa-02367</li><li>fm-cfa-usa-02415</li><li>fm-cfa-usa-02634</li><li>fm-cfa-usa-02833</li><li>fm-cfa-usa-02859</li><li>fm-cfa-usa-02992</li><li>fm-cfa-usa-03018</li><li>fm-cfa-usa-03060</li><li>fm-cfa-usa-03138</li><li>fm-cfa-usa-03262</li><li>fm-cfa-usa-03698</li><li>fm-cfa-usa-03798</li><li>fm-cfa-usa-03881</li><li>fm-cfa-usa-03901</li><li>fm-cfa-usa-03910</li><li>fm-cfa-usa-03964</li><li>fm-cfa-usa-04263</li><li>fm-cfa-usa-04361</li><li>fm-cfa-usa-04539</li><li>fm-cfa-usa-04650</li><li>fm-cfa-usa-04819</li><li>fm-cfa-usa-04904</li><li>fm-cfa-usa-04962</li><li>fm-cfa-usa-05333</li><li>fm-mcd-aus-0281</li><li>fm-poc-nzl-02024</li></ul></div>.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Any known limitations or relevant information:</span>
+                        <span class="detail-value">None explicitly stated.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Perfect Car Count -->
+            <div class="metric-card rounded-lg overflow-hidden">
+                <div class="metric-header" onclick="toggleDetails(this)">
+                    <h2 class="text-2xl font-semibold text-blue-800">14. Perfect Car Count</h2>
+                    <svg class="arrow-icon w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Description / Business Meaning:</span>
+                        <span class="detail-value">This widget displays a throughput metric.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">How it is calculated (formula or logic):</span>
+                        <span class="detail-value">Uses an array called `zones`, containing the `averageId`s of the zones for calculation, and an optional `target` (number). Configurable `averageId` options: `boomGateAverage` (order 1 & order 2), `order1Average`, `order2Average`, `paymentAverage`, `deliverAverage`, `pullForwardAverage`, `waitingAverage`.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Source of data:</span>
+                        <span class="detail-value">Implied from zone averages. Topics: `/eyeq/rolling/<site_id>`.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Frequency of update:</span>
+                        <span class="detail-value">TBD.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Clients currently using:</span>
+                        <span class="detail-value"><span class="toggle-header" onclick="toggleClientList(this)">[+] Show Clients (110)</span><div class="client-list-container" style="display:none;"><ul class="list-disc list-inside ml-4"><li>fm-bkg-nzl-0000198</li><li>fm-bkg-nzl-00002</li><li>fm-bkg-nzl-00003</li><li>fm-bkg-nzl-00005</li><li>fm-bkg-nzl-00006</li><li>fm-bkg-nzl-00008</li><li>fm-bkg-nzl-00010</li><li>fm-bkg-nzl-00012</li><li>fm-bkg-nzl-00014</li><li>fm-bkg-nzl-00015</li><li>fm-bkg-nzl-00016</li><li>fm-bkg-nzl-00017</li><li>fm-bkg-nzl-00018</li><li>fm-bkg-nzl-00019</li><li>fm-bkg-nzl-00023</li><li>fm-bkg-nzl-00026</li><li>fm-bkg-nzl-00029</li><li>fm-bkg-nzl-00031</li><li>fm-bkg-nzl-00032</li><li>fm-bkg-nzl-00035</li><li>fm-bkg-nzl-00037</li><li>fm-bkg-nzl-00038</li><li>fm-bkg-nzl-00039</li><li>fm-bkg-nzl-00040</li><li>fm-bkg-nzl-00042</li><li>fm-bkg-nzl-00043</li><li>fm-bkg-nzl-00044</li><li>fm-bkg-nzl-00045</li><li>fm-bkg-nzl-00046</li><li>fm-bkg-nzl-00047</li><li>fm-bkg-nzl-00048</li><li>fm-bkg-nzl-00049</li><li>fm-bkg-nzl-00050</li><li>fm-bkg-nzl-00051</li><li>fm-bkg-nzl-00052</li><li>fm-bkg-nzl-00055</li><li>fm-bkg-nzl-00056</li><li>fm-bkg-nzl-00057</li><li>fm-bkg-nzl-00058</li><li>fm-bkg-nzl-00061</li><li>fm-bkg-nzl-00062</li><li>fm-bkg-nzl-00063</li><li>fm-bkg-nzl-00064</li><li>fm-bkg-nzl-00065</li><li>fm-bkg-nzl-00066</li><li>fm-bkg-nzl-00067</li><li>fm-bkg-nzl-00069</li><li>fm-bkg-nzl-00070</li><li>fm-bkg-nzl-00071</li><li>fm-bkg-nzl-00073</li><li>fm-bkg-nzl-00074</li><li>fm-bkg-nzl-00075</li><li>fm-bkg-nzl-00076</li><li>fm-bkg-nzl-00077</li><li>fm-bkg-nzl-00078</li><li>fm-bkg-nzl-00079</li><li>fm-bkg-nzl-00080</li><li>fm-bkg-nzl-00081</li><li>fm-bkg-nzl-00082</li><li>fm-bkg-nzl-00083</li><li>fm-bkg-nzl-00084</li><li>fm-bkg-nzl-00085</li><li>fm-bkg-nzl-00086</li><li>fm-bkg-nzl-00087</li><li>fm-bkg-nzl-00088</li><li>fm-bkg-nzl-00089</li><li>fm-bkg-nzl-00090</li><li>fm-bkg-nzl-00091</li><li>fm-bkg-nzl-00092</li><li>fm-bkg-nzl-00093</li><li>fm-bkg-nzl-00094</li><li>fm-bkg-nzl-00095</li><li>fm-bkg-nzl-00096</li><li>fm-bkg-nzl-00097</li><li>fm-bkg-nzl-00098</li><li>fm-bkg-nzl-00099</li><li>fm-bkg-usa-00001</li><li>fm-bkg-usa-00064</li><li>fm-bkg-usa-07553</li><li>fm-kfc-are-12170</li><li>fm-poc-nzl-00048</li><li>fm-poc-nzl-00095</li><li>fm-poc-nzl-00096</li><li>fm-poc-nzl-02025</li><li>fm-poc-nzl-03001</li><li>fm-pop-nzl-03001</li><li>fm-pop-nzl-03002</li><li>fm-pop-nzl-03005</li><li>fm-pop-nzl-03006</li><li>fm-pop-nzl-03007</li><li>fm-pop-nzl-03009</li><li>fm-pop-nzl-03010</li><li>fm-stb-nzl-00001</li><li>fm-stb-nzl-05480</li><li>fm-stb-nzl-05481</li><li>fm-stb-nzl-05742</li><li>fm-tim-can-00001</li><li>fm-tim-can-00002</li></ul></div>.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Any known limitations or relevant information:</span>
+                        <span class="detail-value">Configurable `target`, `title`, and `zones` array.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time Since Last Departure -->
+            <div class="metric-card rounded-lg overflow-hidden">
+                <div class="metric-header" onclick="toggleDetails(this)">
+                    <h2 class="text-2xl font-semibold text-blue-800">15. Time Since Last Departure</h2>
+                    <svg class="arrow-icon w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Description / Business Meaning:</span>
+                        <span class="detail-value">Displays the time since the last vehicle departed the drive thru.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">How it is calculated (formula or logic):</span>
+                        <span class="detail-value">Calculated from a `/eyeq/departure` topic event. The time is displayed in `M:SS` format and resets to a dash if the time exceeds 15 minutes.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Source of data:</span>
+                        <span class="detail-value">Calculated from a `/eyeq/departure` topic event. Topics: `/eyeq/departure/<site_id>`. Requires ROI configuration.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Frequency of update:</span>
+                        <span class="detail-value">Real-time countdown.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Clients currently using:</span>
+                        <span class="detail-value"><span class="toggle-header" onclick="toggleClientList(this)">[+] Show Clients (46)</span><div class="client-list-container" style="display:none;"><ul class="list-disc list-inside ml-4"><li>fm-bkg-usa-07553</li><li>fm-cfa-usa-00695</li><li>fm-cfa-usa-00745</li><li>fm-cfa-usa-00799</li><li>fm-cfa-usa-00814</li><li>fm-cfa-usa-00829</li><li>fm-cfa-usa-01072</li><li>fm-cfa-usa-01218</li><li>fm-cfa-usa-01391</li><li>fm-cfa-usa-01490</li><li>fm-cfa-usa-01573</li><li>fm-cfa-usa-01801</li><li>fm-cfa-usa-02007</li><li>fm-cfa-usa-02077</li><li>fm-cfa-usa-02181</li><li>fm-cfa-usa-02196</li><li>fm-cfa-usa-02226</li><li>fm-cfa-usa-02276</li><li>fm-cfa-usa-02289</li><li>fm-cfa-usa-02367</li><li>fm-cfa-usa-02415</li><li>fm-cfa-usa-02634</li><li>fm-cfa-usa-02833</li><li>fm-cfa-usa-02859</li><li>fm-cfa-usa-02992</li><li>fm-cfa-usa-03060</li><li>fm-cfa-usa-03138</li><li>fm-cfa-usa-03262</li><li>fm-cfa-usa-03698</li><li>fm-cfa-usa-03798</li><li>fm-cfa-usa-03881</li><li>fm-cfa-usa-03901</li><li>fm-cfa-usa-03910</li><li>fm-cfa-usa-03964</li><li>fm-cfa-usa-04263</li><li>fm-cfa-usa-04361</li><li>fm-cfa-usa-04539</li><li>fm-cfa-usa-04650</li><li>fm-cfa-usa-04819</li><li>fm-cfa-usa-04904</li><li>fm-cfa-usa-04962</li><li>fm-cfa-usa-05333</li><li>fm-mcd-aus-0281</li><li>fm-poc-nzl-00002</li><li>fm-poc-nzl-02024</li></ul></div>.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Any known limitations or relevant information:</span>
+                        <span class="detail-value">Resets to a dash if time exceeds 15 minutes.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zone Average -->
+            <div class="metric-card rounded-lg overflow-hidden">
+                <div class="metric-header" onclick="toggleDetails(this)">
+                    <h2 class="text-2xl font-semibold text-blue-800">16. Zone Average</h2>
+                    <svg class="arrow-icon w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Description / Business Meaning:</span>
+                        <span class="detail-value">This widget displays the average times for the configured drive thru zones for the last 60 minutes up until the current time (rolling hour).</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">How it is calculated (formula or logic):</span>
+                        <span class="detail-value">Calculates average times for configured drive thru zones for the last 60 minutes. Configurable `zones` array containing `averageId` (string: `boomGateAverage`, `order1Average`, `order2Average`, `paymentAverage`, `deliverAverage`, `pullForwardAverage`, `waitingAverage`), optional `label` (string), and optional `header` (string).</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Source of data:</span>
+                        <span class="detail-value">Implied from zone data. Topics: `/eyeq/rolling/<site_id>`.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Frequency of update:</span>
+                        <span class="detail-value">Based on a rolling 60-minute period.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Clients currently using:</span>
+                        <span class="detail-value"><span class="toggle-header" onclick="toggleClientList(this)">[+] Show Clients (126)</span><div class="client-list-container" style="display:none;"><ul class="list-disc list-inside ml-4"><li>fm-bkg-nzl-0000198</li><li>fm-bkg-nzl-00002</li><li>fm-bkg-nzl-00003</li><li>fm-bkg-nzl-00005</li><li>fm-bkg-nzl-00006</li><li>fm-bkg-nzl-00008</li><li>fm-bkg-nzl-00010</li><li>fm-bkg-nzl-00012</li><li>fm-bkg-nzl-00014</li><li>fm-bkg-nzl-00015</li><li>fm-bkg-nzl-00016</li><li>fm-bkg-nzl-00017</li><li>fm-bkg-nzl-00018</li><li>fm-bkg-nzl-00019</li><li>fm-bkg-nzl-00023</li><li>fm-bkg-nzl-00026</li><li>fm-bkg-nzl-00029</li><li>fm-bkg-nzl-00031</li><li>fm-bkg-nzl-00032</li><li>fm-bkg-nzl-00035</li><li>fm-bkg-nzl-00037</li><li>fm-bkg-nzl-00038</li><li>fm-bkg-nzl-00039</li><li>fm-bkg-nzl-00040</li><li>fm-bkg-nzl-00042</li><li>fm-bkg-nzl-00043</li><li>fm-bkg-nzl-00044</li><li>fm-bkg-nzl-00045</li><li>fm-bkg-nzl-00046</li><li>fm-bkg-nzl-00047</li><li>fm-bkg-nzl-00048</li><li>fm-bkg-nzl-00049</li><li>fm-bkg-nzl-00050</li><li>fm-bkg-nzl-00051</li><li>fm-bkg-nzl-00052</li><li>fm-bkg-nzl-00055</li><li>fm-bkg-nzl-00056</li><li>fm-bkg-nzl-00057</li><li>fm-bkg-nzl-00058</li><li>fm-bkg-nzl-00061</li><li>fm-bkg-nzl-00062</li><li>fm-bkg-nzl-00063</li><li>fm-bkg-nzl-00064</li><li>fm-bkg-nzl-00065</li><li>fm-bkg-nzl-00066</li><li>fm-bkg-nzl-00067</li><li>fm-bkg-nzl-00069</li><li>fm-bkg-nzl-00070</li><li>fm-bkg-nzl-00071</li><li>fm-bkg-nzl-00073</li><li>fm-bkg-nzl-00074</li><li>fm-bkg-nzl-00075</li><li>fm-bkg-nzl-00076</li><li>fm-bkg-nzl-00077</li><li>fm-bkg-nzl-00078</li><li>fm-bkg-nzl-00079</li><li>fm-bkg-nzl-00080</li><li>fm-bkg-nzl-00081</li><li>fm-bkg-nzl-00082</li><li>fm-bkg-nzl-00083</li><li>fm-bkg-nzl-00084</li><li>fm-bkg-nzl-00085</li><li>fm-bkg-nzl-00086</li><li>fm-bkg-nzl-00087</li><li>fm-bkg-nzl-00088</li><li>fm-bkg-nzl-00089</li><li>fm-bkg-nzl-00090</li><li>fm-bkg-nzl-00091</li><li>fm-bkg-nzl-00092</li><li>fm-bkg-nzl-00093</li><li>fm-bkg-nzl-00094</li><li>fm-bkg-nzl-00095</li><li>fm-bkg-nzl-00096</li><li>fm-bkg-nzl-00097</li><li>fm-bkg-nzl-00098</li><li>fm-bkg-nzl-00099</li><li>fm-bkg-usa-00001</li><li>fm-bkg-usa-00064</li><li>fm-bkg-usa-07553</li><li>fm-cul-usa-00189</li><li>fm-cul-usa-00240</li><li>fm-elj-aus-0003</li><li>fm-kfc-are-12170</li><li>fm-mcd-aus-0034</li><li>fm-mcd-aus-0049</li><li>fm-mcd-aus-0281</li><li>fm-mcd-aus-0414</li><li>fm-mcd-aus-0599</li><li>fm-mcd-aus-0706</li><li>fm-mcd-aus-0725</li><li>fm-mcd-aus-0771</li><li>fm-mcd-aus-1273</li><li>fm-mcd-aus-1829</li><li>fm-mcd-aus-2029</li><li>fm-mcd-can-04463</li><li>fm-poc-nzl-00002</li><li>fm-poc-nzl-00003</li><li>fm-poc-nzl-00048</li><li>fm-poc-nzl-00095</li><li>fm-poc-nzl-00096</li><li>fm-poc-nzl-02025</li><li>fm-poc-nzl-03001</li><li>fm-pop-nzl-03001</li><li>fm-pop-nzl-03002</li><li>fm-pop-nzl-03005</li><li>fm-pop-nzl-03006</li><li>fm-pop-nzl-03007</li><li>fm-pop-nzl-03009</li><li>fm-pop-nzl-03010</li><li>fm-pop-usa-02023</li><li>fm-ptl-usa-00003</li><li>fm-stb-nzl-00001</li><li>fm-stb-nzl-05480</li><li>fm-stb-nzl-05481</li><li>fm-stb-nzl-05742</li><li>fm-tim-can-00001</li><li>fm-tim-can-00002</li><li>fm-zmb-aus-00001</li></ul></div>.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Any known limitations or relevant information:</span>
+                        <span class="detail-value">Configurable zones.</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md text-gray-700">
+            <h3 class="text-2xl font-semibold text-center mb-4">Metrics Listed but Information Not Available in Provided Files:</h3>
+            <ul class="list-disc list-inside text-lg text-gray-600 grid grid-cols-1 md:grid-cols-2 gap-2">
+                <li>Coming Soon (Widget state, not a metric)</li>
+                <li>Time at window gauge</li>
+                <li>Q zone average</li>
+                <li>Q zone gauge</li>
+                <li>People counter</li>
+                <li>Zone an average gauge</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <script>
+        function toggleDetails(headerElement) {
+            const details = headerElement.nextElementSibling;
+            const arrowIcon = headerElement.querySelector('.arrow-icon');
+            if (details.style.display === 'block') {
+                details.style.display = 'none';
+                arrowIcon.classList.remove('rotated');
+            } else {
+                details.style.display = 'block';
+                arrowIcon.classList.add('rotated');
+            }
+        }
+
+        function toggleClientList(headerElement) {
+            const container = headerElement.nextElementSibling; // The div.client-list-container
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                headerElement.textContent = headerElement.textContent.replace('[+]', '[-]');
+            } else {
+                container.style.display = 'none';
+                headerElement.textContent = headerElement.textContent.replace('[-]', '[+]');
+            }
+        }
+    </script>
+</body>
+</html>
