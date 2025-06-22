@@ -41,7 +41,7 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
         }
         .widget-header {
-            cursor: pointer;
+            cursor: default; /* Change cursor back to default */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -50,12 +50,12 @@
             border-bottom: 1px solid #dbeafe;
         }
         .widget-header:hover {
-            background-color: #dbeafe; /* Slightly darker on hover */
+            background-color: #eff6ff; /* Remove hover effect for non-toggleable headers */
         }
         .widget-details {
             padding: 1rem 1.5rem;
             border-top: 1px solid #e5e7eb;
-            display: none; /* Hidden by default */
+            display: block; /* Always visible */
         }
         .detail-item {
             margin-bottom: 0.75rem;
@@ -68,12 +68,9 @@
             color: #6b7280; /* Medium gray */
         }
         .arrow-icon {
-            transition: transform 0.3s ease-in-out;
+            display: none; /* Hide arrow icon */
         }
-        .arrow-icon.rotated {
-            transform: rotate(90deg);
-        }
-        /* Styles for expandable lists */
+        /* Styles for expandable lists (kept for other sections) */
         .toggle-header {
             cursor: pointer;
             color: #1a73e8; /* Blue for clickable text */
@@ -84,18 +81,18 @@
         .toggle-header:hover {
             color: #1558b0; /* Darker blue on hover */
         }
-        .list-container {
+        .client-list-container {
             margin-top: 0.5rem;
             padding-left: 1rem; /* Indent the list */
             border-left: 2px solid #e0e0e0; /* Visual separator */
             font-size: 0.9em; /* Slightly smaller font for list items */
         }
-        .list-container ul {
+        .client-list-container ul {
             list-style: disc; /* Bullet points */
             padding-left: 1.25rem; /* Standard bullet indent */
             margin: 0;
         }
-        .list-container li {
+        .client-list-container li {
             margin-bottom: 0.25rem; /* Small space between list items */
         }
         .note-aside {
@@ -116,17 +113,13 @@
 
         <div id="dashboard-sections">
 
-            <!-- General Dashboard Information -->
-            <div class="section-card rounded-lg overflow-hidden">
+             <!-- General Dashboard Information -->
+             <div class="section-card rounded-lg overflow-hidden">
                 <div class="section-header" onclick="toggleSectionDetails(this)">
                     <span>General Dashboard Information</span>
                     <svg class="arrow-icon w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </div>
                 <div class="metric-details" style="display:block;"> <!-- Initially open -->
-                    <div class="detail-item">
-                        <span class="detail-label">Customers:</span>
-                        <span class="detail-value">Unlike the NLAF, most of the "racetrack" widgets are used by the following customers: MCD, MNZ, ELJ and CZP. However, not all of the sites for these customers use ALL the widgets. For example the PEAK15 widget is used by only 4 of the 20 possible CZP sites.</span>
-                    </div>
                     <div class="detail-item">
                         <span class="detail-label">Dashboard Composition:</span>
                         <span class="detail-value">The dashboard is made up of a grid of widget components. Each has its own function that processes the data from EYECUE server into a visual UI.</span>
@@ -613,46 +606,46 @@
                 </div>
             </div>
 
-            <!-- Alerting Functionality -->
-            <div class="section-card rounded-lg overflow-hidden">
-                <div class="section-header" onclick="toggleSectionDetails(this)">
-                    <span>Alerting</span>
-                    <svg class="arrow-icon w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                </div>
-                <div class="metric-details">
-                    <p class="text-gray-700">This section describes the alerting capabilities of the dashboard, which trigger based on specific metrics and thresholds.</p>
-                </div>
-            </div>
-
-            <!-- Restrictions -->
-            <div class="section-card rounded-lg overflow-hidden">
-                <div class="section-header" onclick="toggleSectionDetails(this)">
-                    <span>Restrictions</span>
-                    <svg class="arrow-icon w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                </div>
-                <div class="metric-details">
-                    <p class="text-gray-700 mb-4">Widgets can be restricted to specific clients only. For example, all widgets relating to Thruput are restricted to KFC stores as it is a metric they only use.</p>
-                    <p class="text-gray-700">Most widgets are unrestricted to clients and all terminology is adapted based on the client's preference.</p>
-                </div>
-            </div>
-
-            <!-- Customization -->
-            <div class="section-card rounded-lg overflow-hidden">
-                <div class="section-header" onclick="toggleSectionDetails(this)">
-                    <span>Customization</span>
-                    <svg class="arrow-icon w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                </div>
-                <div class="metric-details">
-                    <p class="text-gray-700 mb-4">All widgets can be moved and resized in the designer. This is done with a simple drag and drop functionality:</p>
-                    <p class="text-gray-700 mb-4">All widgets that a user is able to access are shown on the left-hand side of the screen, split into their various categories.</p>
-                    <p class="text-gray-700">Widgets can be removed and added at users preference to design a dashboard that suits their specific needs.</p>
-                    <p class="text-gray-700 mt-4 font-semibold">Additional Widget Options:</p>
-                    <ul class="list-disc list-inside ml-4 text-gray-700">
-                        <li>Some widgets have additional options; by selecting the widget and clicking the widget configuration on the left, a drawer will open up with additional information.</li>
-                        <li>The user can label the display title of the widget or even change how the information is displayed, i.e., the Order Average widget can be split into displaying the average times for lane 1 and 2 rather than a combined average.</li>
-                    </ul>
-                </div>
-            </div>
+                       <!-- Alerting Functionality -->
+                       <div class="section-card rounded-lg overflow-hidden">
+                        <div class="section-header" onclick="toggleSectionDetails(this)">
+                            <span>Alerting</span>
+                            <svg class="arrow-icon w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="metric-details">
+                            <p class="text-gray-700">This section describes the alerting capabilities of the dashboard, which trigger based on specific metrics and thresholds.</p>
+                        </div>
+                    </div>
+        
+                    <!-- Restrictions -->
+                    <div class="section-card rounded-lg overflow-hidden">
+                        <div class="section-header" onclick="toggleSectionDetails(this)">
+                            <span>Restrictions</span>
+                            <svg class="arrow-icon w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="metric-details">
+                            <p class="text-gray-700 mb-4">Widgets can be restricted to specific clients only. For example, all widgets relating to Thruput are restricted to KFC stores as it is a metric they only use.</p>
+                            <p class="text-gray-700">Most widgets are unrestricted to clients and all terminology is adapted based on the client's preference.</p>
+                        </div>
+                    </div>
+        
+                    <!-- Customization -->
+                    <div class="section-card rounded-lg overflow-hidden">
+                        <div class="section-header" onclick="toggleSectionDetails(this)">
+                            <span>Customization</span>
+                            <svg class="arrow-icon w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="metric-details">
+                            <p class="text-gray-700 mb-4">All widgets can be moved and resized in the designer. This is done with a simple drag and drop functionality:</p>
+                            <p class="text-gray-700 mb-4">All widgets that a user is able to access are shown on the left-hand side of the screen, split into their various categories.</p>
+                            <p class="text-gray-700">Widgets can be removed and added at users preference to design a dashboard that suits their specific needs.</p>
+                            <p class="text-gray-700 mt-4 font-semibold">Additional Widget Options:</p>
+                            <ul class="list-disc list-inside ml-4 text-gray-700">
+                                <li>Some widgets have additional options; by selecting the widget and clicking the widget configuration on the left, a drawer will open up with additional information.</li>
+                                <li>The user can label the display title of the widget or even change how the information is displayed, i.e., the Order Average widget can be split into displaying the average times for lane 1 and 2 rather than a combined average.</li>
+                            </ul>
+                        </div>
+                    </div>
 
             <!-- Designer Options (General Functionalities) -->
             <div class="section-card rounded-lg overflow-hidden">
@@ -660,11 +653,11 @@
                     <span>Designer Options</span>
                     <svg class="arrow-icon w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </div>
-                <div class="metric-details">
+                <div class="metric-details" style="display:block;">
                     <p class="mb-4 text-gray-700">The designer also has additional options along the top that allow the user to edit more general functionalities:</p>
                     <div class="space-y-4">
                         <div class="widget-card rounded-lg overflow-hidden">
-                            <div class="widget-header" onclick="toggleDetails(this)">
+                            <div class="widget-header">
                                 <h3 class="text-xl font-semibold text-blue-700">Renaming</h3>
                                 <svg class="arrow-icon w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                             </div>
@@ -673,7 +666,7 @@
                             </div>
                         </div>
                         <div class="widget-card rounded-lg overflow-hidden">
-                            <div class="widget-header" onclick="toggleDetails(this)">
+                            <div class="widget-header">
                                 <h3 class="text-xl font-semibold text-blue-700">Select Dashboard</h3>
                                 <svg class="arrow-icon w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                             </div>
@@ -682,7 +675,7 @@
                             </div>
                         </div>
                         <div class="widget-card rounded-lg overflow-hidden">
-                            <div class="widget-header" onclick="toggleDetails(this)">
+                            <div class="widget-header">
                                 <h3 class="text-xl font-semibold text-blue-700">My Screens</h3>
                                 <svg class="arrow-icon w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                             </div>
@@ -691,7 +684,7 @@
                             </div>
                         </div>
                         <div class="widget-card rounded-lg overflow-hidden">
-                            <div class="widget-header" onclick="toggleDetails(this)">
+                            <div class="widget-header">
                                 <h3 class="text-xl font-semibold text-blue-700">Templates</h3>
                                 <svg class="arrow-icon w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                             </div>
@@ -700,7 +693,7 @@
                             </div>
                         </div>
                         <div class="widget-card rounded-lg overflow-hidden">
-                            <div class="widget-header" onclick="toggleDetails(this)">
+                            <div class="widget-header">
                                 <h3 class="text-xl font-semibold text-blue-700">Store Settings</h3>
                                 <svg class="arrow-icon w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                             </div>
@@ -709,7 +702,7 @@
                             </div>
                         </div>
                         <div class="widget-card rounded-lg overflow-hidden">
-                            <div class="widget-header" onclick="toggleDetails(this)">
+                            <div class="widget-header">
                                 <h3 class="text-xl font-semibold text-blue-700">Reset</h3>
                                 <svg class="arrow-icon w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                             </div>
@@ -718,7 +711,7 @@
                             </div>
                         </div>
                         <div class="widget-card rounded-lg overflow-hidden">
-                            <div class="widget-header" onclick="toggleDetails(this)">
+                            <div class="widget-header">
                                 <h3 class="text-xl font-semibold text-blue-700">Clear All</h3>
                                 <svg class="arrow-icon w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                             </div>
@@ -727,7 +720,7 @@
                             </div>
                         </div>
                         <div class="widget-card rounded-lg overflow-hidden">
-                            <div class="widget-header" onclick="toggleDetails(this)">
+                            <div class="widget-header">
                                 <h3 class="text-xl font-semibold text-blue-700">Save and Publish</h3>
                                 <svg class="arrow-icon w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                             </div>
